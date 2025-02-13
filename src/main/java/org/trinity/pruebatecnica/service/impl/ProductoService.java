@@ -28,8 +28,12 @@ public class ProductoService implements IProductoService {
 
     @Override
     public Producto save(Producto producto) {
+        if (producto.getCliente() == null || producto.getCliente().getId() == null) {
+            throw new RuntimeException("El producto debe estar vinculado a un cliente existente.");
+        }
         return productoRepository.save(producto);
     }
+
 
     @Override
     public Producto update(Long id, Producto producto) {
@@ -48,14 +52,15 @@ public class ProductoService implements IProductoService {
     public Producto cambiarEstado(Long id, String estado) {
         return productoRepository.findById(id).map(existingProducto -> {
             try {
-                existingProducto.setEstado(EstadoCuenta.valueOf(estado.toUpperCase()));
+                EstadoCuenta nuevoEstado = EstadoCuenta.valueOf(estado.toUpperCase());
+                existingProducto.setEstado(nuevoEstado);
+                return productoRepository.save(existingProducto);
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Estado inválido: " + estado);
             }
-
-            return productoRepository.save(existingProducto);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
+
 
     @Override
     public void delete(Long id) {

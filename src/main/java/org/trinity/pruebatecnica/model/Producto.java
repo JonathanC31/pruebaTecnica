@@ -54,9 +54,9 @@ public class Producto {
     private void prePersist() {
         this.numeroCuenta = generarNumeroCuenta();
         if (this.tipoCuenta == TipoCuenta.AHORROS) {
-            this.estado = EstadoCuenta.ACTIVA; // Cuentas de ahorro activas por defecto
+            this.estado = EstadoCuenta.ACTIVA;
             if (this.saldo == null) {
-                this.saldo = 0.0; // Saldo inicial
+                this.saldo = 0.0;
             }
         }
     }
@@ -64,7 +64,7 @@ public class Producto {
     private String generarNumeroCuenta() {
         String prefix = (this.tipoCuenta == TipoCuenta.AHORROS) ? "53" : "33";
         Random random = new Random();
-        String numeroAleatorio = String.format("%08d", random.nextInt(100000000)); // 8 dígitos aleatorios
+        String numeroAleatorio = String.format("%08d", random.nextInt(100000000));
         return prefix + numeroAleatorio;
     }
 
